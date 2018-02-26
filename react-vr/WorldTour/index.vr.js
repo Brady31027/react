@@ -44,6 +44,7 @@ const places = [
 
 const styles = StyleSheet.create({
   menu: {
+    position: 'absolute',
     width: 0.6,
     flexDirection: 'row',
     backgroundColor: '#BFBFBFAA',
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
     ]
   },
   subMenu: {
+    position: 'absolute',
     backgroundColor: '#BFBFBFAA',
     alignItems: 'center',
     justifyContent: 'center',
@@ -71,6 +73,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 0.8,
     height: 0.2,
+  },
+  description: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    backgroundColor: '#FFFFFFAA',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transform: [
+      { translate: [1, 1, -3] }
+    ]
   }
 
 });
@@ -89,6 +102,7 @@ class Menu extends React.Component {
   render() {
     return (
       <View>
+      <Description />
         <VrButton style={styles.menu} onClick={this.toggleMenu.bind(this)}>
           <Text style={styles.menuText}>
              {this.state.expand ? "Close Menu" : "Open Menu"}
@@ -117,6 +131,22 @@ class Menu extends React.Component {
   }
 }
 
+class Description extends React.Component {
+  render(){
+    return (
+      <View style={styles.description}>
+        <Text >aaa</Text>
+        <VrButton>
+          <Text>Show</Text>
+        </VrButton>
+        <VrButton>
+          <Text>Dismiss</Text>
+        </VrButton>
+      </View>
+    );
+  }
+}
+
 export default class WorldTour extends React.Component {
 
   constructor(props){
@@ -127,7 +157,6 @@ export default class WorldTour extends React.Component {
   }
 
   setPanoImage(url){
-    console.log('callback'+ url);
     this.setState({place_image: url});
   }
 
@@ -136,6 +165,7 @@ export default class WorldTour extends React.Component {
       <View>
         <Pano source={asset( this.state.place_image) }/>
         <Menu callbackHandler={this.setPanoImage.bind(this)}/>
+        
       </View>
     );
   }
