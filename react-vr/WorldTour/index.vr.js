@@ -13,7 +13,7 @@ const places = [
   {
     title: 'Museum',
     image: 'museum.jpg',
-    description: ''
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
   },
   {
     title: 'Louvre',
@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     transform: [
       { translate: [-2, -0.666, -3] }
-    ]
+    ],
+    borderWidth: 0.01,
+    borderColor: '#808080',
   },
   subMenu: {
     position: 'absolute',
@@ -74,16 +76,44 @@ const styles = StyleSheet.create({
     width: 0.8,
     height: 0.2,
   },
-  description: {
+  hairline: {
+    backgroundColor: 'red',
+    height: 0.015,
+    width: 0.5
+  },
+  description_root: {
     position: 'absolute',
-    width: 1,
-    height: 1,
-    backgroundColor: '#FFFFFFAA',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 1.6,
+    backgroundColor: '#FFFFFF88',
     transform: [
       { translate: [1, 1, -3] }
     ]
+  },
+  description_title: {
+    alignItems: 'center',
+  },
+  description_title_font: {
+    color: '#FFF',
+    fontSize: 0.15,
+    marginBottom: 0.03,
+  },
+  description_btn_view: {
+    width: 1.5,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 0.1
+  },
+  description_btn: {
+    alignSelf:'flex-end',
+    marginBottom: 0.1,
+    marginLeft: 0.1,
+    marginRight: 0.1,
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#C0C0C0',
+    borderWidth: 0.01,
+    borderColor: '#808080',
   }
 
 });
@@ -102,7 +132,6 @@ class Menu extends React.Component {
   render() {
     return (
       <View>
-      <Description />
         <VrButton style={styles.menu} onClick={this.toggleMenu.bind(this)}>
           <Text style={styles.menuText}>
              {this.state.expand ? "Close Menu" : "Open Menu"}
@@ -116,7 +145,7 @@ class Menu extends React.Component {
                   <VrButton style={styles.menuItem}
                         key={index}
                         onClick={ () => {
-                          this.props.callbackHandler(place.image)}
+                          this.props.callbackHandler(place)}
                         }>
                     <Text style={styles.menuText}>{place.title} </Text>    
                   </VrButton>
@@ -131,17 +160,54 @@ class Menu extends React.Component {
   }
 }
 
+class DescriptionHead extends React.Component {
+  render() {
+    return (
+      <View style={styles.description_title}>
+        <Text style={styles.description_title_font}>
+          {this.props.place.title}
+        </Text>
+        <View style={styles.hairline} />
+      </View>
+    );
+  }
+}
+
+class DescriptionContent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expand: true
+    }
+  }
+
+  render() {
+    return (
+      <View style={{position: 'absolute'}}>
+        <DescriptionHead place={this.props.place}/>
+        {this.state.expand? 
+          <Text style={{margin: 0.03}}>{this.props.place.description}</Text>
+          :console.log('dismiss')}
+        
+        <View style={styles.description_btn_view}>
+          <VrButton style={styles.description_btn}
+            onClick={()=>{
+              this.setState({expand: !this.state.expand});
+        }}>
+          {this.state.expand? <Text>Hide Info</Text>: <Text>Show Info</Text>}
+            
+          </VrButton>
+        </View>
+      </View>
+    );
+  }
+}
+
 class Description extends React.Component {
   render(){
     return (
-      <View style={styles.description}>
-        <Text >aaa</Text>
-        <VrButton>
-          <Text>Show</Text>
-        </VrButton>
-        <VrButton>
-          <Text>Dismiss</Text>
-        </VrButton>
+      <View style={styles.description_root}>
+        <DescriptionContent place={this.props.place}/>
       </View>
     );
   }
@@ -152,20 +218,24 @@ export default class WorldTour extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      place_image: 'museum.jpg'
+      place: {
+        title: 'Museum',
+        image: 'museum.jpg',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      }
     }
   }
 
-  setPanoImage(url){
-    this.setState({place_image: url});
+  setPanoImage(selectedPlace){
+    this.setState({place: selectedPlace});
   }
 
   render() {
     return (
       <View>
-        <Pano source={asset( this.state.place_image) }/>
+        <Pano source={asset( this.state.place.image) }/>
         <Menu callbackHandler={this.setPanoImage.bind(this)}/>
-        
+        <Description place={this.state.place}/>
       </View>
     );
   }
