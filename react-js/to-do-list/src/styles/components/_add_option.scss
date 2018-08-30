@@ -1,0 +1,21 @@
+.add-option {
+     display: flex;
+     flex-direction: column;
+     margin-top: 1rem;
+     padding: .5rem;
+}
+
+.add-option__input {
+    flex-grow: 1;
+    border-bottom: .2rem solid darken($color: $button-color, $amount: 10%);
+    margin: 0 0 $small-space 0;
+}
+
+@media(min-width: $desktop-width) {
+    .add-option {
+        flex-direction: row;
+    }
+    .add-option__input {
+        margin: 0 .5rem 0 0;
+    }
+}

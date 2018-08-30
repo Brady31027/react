@@ -1,0 +1,52 @@
+.big-button {
+    background: $button-color;
+    border: none;
+    border-bottom: 0.3rem solid darken($color: $button-color, $amount: 10%);
+    border-right: 0.3rem solid darken($color: $button-color, $amount: 10%);
+    color: white;
+    font-size: $large-space;
+    width: 100%;
+    margin-bottom: $mid-space;
+}
+
+.big-button:disabled {
+    opacity: 0.3;
+}
+
+.small-button {
+    background: $button-color;
+    border: none;
+    border-bottom: 0.15rem solid darken($color: $button-color, $amount: 10%);
+    border-right: 0.15rem solid darken($color: $button-color, $amount: 10%);
+    color: white;
+    font-size: $mid-space;
+}
+
+.small-button__modal {
+    background: $button-link-color;
+    border: none;
+    border-bottom: 0.15rem solid darken($color: $button-color, $amount: 10%);
+    border-right: 0.15rem solid darken($color: $button-color, $amount: 10%);
+    color: $button-color;
+    font-size: $mid-space;
+}
+
+.small-button--link {
+    background: none;
+    border: none;
+    color: $button-link-color;
+    padding: 0;
+}
+
+.small-button--remove {
+    background: none;
+    border: none;
+    color: $option-err-msg  !important;
+    padding: 0;
+}
+
+@media (min-width: $desktop-width) {
+    .big-button {
+        margin-bottom: $large-space;
+    }
+}

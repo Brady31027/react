@@ -1,0 +1,19 @@
+.option {
+     display: flex;
+     justify-content: space-between;
+     padding: $small-space $small-space;
+     border-bottom: 1px solid darken($color: $widget-header-background, $amount: 20%)
+}
+
+.option__text {
+    color: #0B3861;
+    font-weight: 500;
+    font-size: 2rem;
+    margin: 0;
+    word-break: break-all;
+}
+.option__errmsg {
+    color: $option-err-msg;
+    text-align: center;
+    font-style: italic;
+}

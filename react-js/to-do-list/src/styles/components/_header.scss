@@ -1,0 +1,27 @@
+.header {
+    background: $header-background;
+    color: $header-default-color;
+    margin-bottom: $mid-space;
+    padding:$mid-space $no-space;
+}
+
+.header__title {
+    margin: $no-space;
+    margin-bottom: $small-space;
+    color: $header-title-color;
+    font-size: $large-space;
+    
+}
+
+.header__subtitle {
+    margin: $no-space;
+    color: $header-subtitle-color;
+    font-size: $mid-space;
+    font-weight: 500;
+}
+
+@media (min-width: $desktop-width) {
+    .header {
+        margin-bottom: $extra-large-space;
+    }
+}

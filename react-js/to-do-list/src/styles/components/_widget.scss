@@ -1,0 +1,24 @@
+.widget-header {
+    background: $widget-header-background;
+    color: $widget-header-title;
+    display: flex;
+    justify-content: space-between;
+    padding: $extra-small-space;
+}
+
+.widget-header__title {
+    background: $widget-header-background;
+    color: $widget-header-title;
+    display: flex;
+    justify-content: space-between;
+    padding: $extra-small-space;
+    margin: 0;
+}
+.widget-header-text--dim {
+    color: $header-subtitle-color;
+}
+
+.widget-body {
+    background: $header-subtitle-color;
+    padding-bottom: $mid-space;
+}
