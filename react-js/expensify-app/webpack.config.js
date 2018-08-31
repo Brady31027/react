@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/app.js',
+    entry: './src/playground/redux-expensify.js',
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js'
@@ -13,7 +13,8 @@ module.exports = {
             exclude: /node_modules/,
             query: {
                 presets: ['env', 'react'],
-                plugins: ["transform-class-properties"]
+                plugins: ["transform-class-properties", 
+                          "transform-object-rest-spread"]
             }
         }, {
             use: ['style-loader', 
