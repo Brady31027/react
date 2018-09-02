@@ -2,7 +2,6 @@ import {createStore, combineReducers} from 'redux';
 import uuid from 'uuid';
 
 // State
-
 const demoState = {
     expenses: [{
         id: 'abc_id',
@@ -19,62 +18,56 @@ const demoState = {
     },
 };
 
-
-// Actions: includes the follows
-// ADD_EXPENSE
-const actionAddExpense = ({ desc = '', note = '', amount = 0, createdBy = 0} = {}) => ({
+// Actions
+const actionAddExpense = ({ desc = '', note = '', amount = 0, createdAt = 0} = {}) => ({
     type: 'ADD_EXPENSE',
     expense: {
         id: uuid(),
         desc: desc,
         note: note,
         amount: amount,
-        createdBy: createdBy,
+        createdAt: createdAt,
     }
 });
 
-// REMOVE_EXPENSE
 const actionRemoveExpense = ({id} = {}) => ({
     type: 'REMOVE_EXPENSE',
     id: id
 });
 
-// EDIT_EXPENSE
 const actionEditExpense = (id, updates) => ({
     type: 'EDIT_EXPENSE',
     id: id,
     updates: updates,
 });
 
-// SET_TEXT_FILTER
 const actionSetTextFilter = (text = '') => ({
     type: "SET_TEXT_FILTER",
     text: text,
 });
 
-// SET_BY_DATE
-const actionSetByDate = () => ({
-    type: "SET_BY_DATE"
+const actionSortByDate = () => ({
+    type: "SORT_BY_DATE",
+    option: "date",
 });
 
-// SET_BY_AMOUNT
-const actionSetByAmount = () => ({
-    type: "SET_BY_AMOUNT"
+const actionSortByAmount = () => ({
+    type: "SORT_BY_AMOUNT",
+    option: "amount",
 });
 
-// SET_START_DATE
-const actionSetStartDate = () => ({
-    type: "SET_START_DATE"
+const actionSetStartDate = (date) => ({
+    type: "SET_START_DATE",
+    date: date,
 });
 
-// SET_END_DATE
-const actionSetEndDate = () => ({
-    type: "SET_END_DATE"
+const actionSetEndDate = (date) => ({
+    type: "SET_END_DATE",
+    date: date,
 });
 
 
 // Reducer
-
 // Expense reducer
 const ExpenseReducer = (state = [], action) => {
     switch (action.type) {
@@ -86,7 +79,7 @@ const ExpenseReducer = (state = [], action) => {
             return state.map((expense) => {
                 if (expense.id === action.id) {
                     return {...expense, ...action.updates};
-                }else {
+                } else {
                     return expense;
                 }
             });
@@ -100,13 +93,19 @@ const FilterReducer = (state = [], action) => {
     switch (action.type) {
         case 'SET_TEXT_FILTER':
             return {...state, text: action.text}
+        case 'SORT_BY_AMOUNT':
+        case 'SORT_BY_DATE':
+            return {...state, sortBy: action.option};
+        case 'SET_START_DATE':
+            return {...state, startDate: action.date};
+        case 'SET_END_DATE':
+            return {...state, endDate: action.date};
         default:
             return state;
     }
 }
 
 // Store
-
 const store = createStore(
     combineReducers({
         expenses: ExpenseReducer,
@@ -114,8 +113,33 @@ const store = createStore(
     })
 );
 
+const getVisibleExpenses = (expenses, {text, sortBy, startDate, endDate}) => {
+    return expenses.filter((expense) => {
+        const startDateMatch = typeof startDate !== 'number' || 
+                                expense.createdAt >= startDate;
+        const endDateMatch = typeof endDate !== 'number' ||
+                                expense.createdAt <= endDate;
+        const textMatch = text === undefined || 
+                        expense.desc.toLowerCase().includes(text.toLowerCase());
+        
+        return startDateMatch && endDateMatch && textMatch; 
+    }).sort((expense1, expense2) => {
+        console.log(sortBy)
+        if (sortBy === 'amount') {
+            // large amount comes first
+            return (expense1.amount < expense2.amount)? 1: -1;
+        } else {
+            // older data comes first
+            return (expense1.createdAt > expense2.createdAt)? 1: -1;
+        }
+    });
+}
+
+
 const unsubscribe = store.subscribe(() => {
-    console.log(store.getState());
+    const state = store.getState();
+    const expenses = getVisibleExpenses(state.expenses, state.filters);
+    console.log(expenses);
 }); 
 
 // Test
@@ -123,17 +147,21 @@ const expense1 = store.dispatch(actionAddExpense({
     desc: '100',
     note: '100',
     amount: 100,
-    createdBy: 100
+    createdAt: 100
 }));
 
 const expense2 = store.dispatch(actionAddExpense({
     desc: '200',
     note: '200',
     amount: 200,
-    createdBy: 200
+    createdAt: 200
 }));
+store.dispatch(actionSortByAmount());
+// store.dispatch(actionSetStartDate(200));
+// store.dispatch(actionSetEndDate(300));
+//store.dispatch(actionSetTextFilter('10'));
 
-store.dispatch(actionRemoveExpense({
+/* store.dispatch(actionRemoveExpense({
     id: expense1.expense.id
 }));
 
@@ -144,12 +172,10 @@ store.dispatch(actionEditExpense(expense2.expense.id,
     }
 ));
 
-
 store.dispatch(actionSetTextFilter('rent'));
 store.dispatch(actionSetTextFilter());
-//  // Actions
-// store.dispatch(actionIncrease({incrementBy: 3}));
-// store.dispatch(actionDecrease({decrementBy: 2}));
-// store.dispatch(actionReset());
-// store.dispatch(actionSet({setBy: 100}));
+store.dispatch(actionSortByAmount());
+store.dispatch(actionSortByDate());
+store.dispatch(actionSetStartDate(123));
+store.dispatch(actionSetEndDate(456)); */
 
