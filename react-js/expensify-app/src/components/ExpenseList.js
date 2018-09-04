@@ -16,7 +16,7 @@ const ExpenseList = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        'expenses': getVisibleExpenses(state.expenses, state.filters)
+        expenses: getVisibleExpenses(state.expenses, state.filters)
     };
 }
 

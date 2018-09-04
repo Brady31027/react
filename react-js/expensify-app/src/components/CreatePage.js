@@ -1,4 +1,5 @@
 import React from 'react';
+import ExpenseForm from './ExpenseForm';
 
 class CreatePage extends React.Component {
     
@@ -10,7 +11,8 @@ class CreatePage extends React.Component {
     render () {
         return (
             <div>
-                <p>create page</p>
+                 <h1>Add Expense</h1>
+                <ExpenseForm />
             </div>
         );
     }
