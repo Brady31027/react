@@ -12,12 +12,14 @@ class ExpenseForm extends React.Component {
             amount: '',
             createdAt: moment(),
             calendarFocused: false,
+            err_msg: '',
         };
         this.onDescChange = this.onDescChange.bind(this);
         this.onNoteChange = this.onNoteChange.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
         this.onDateChange = this.onDateChange.bind(this);
         this.onDateFocusChange = this.onDateFocusChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
   
 
@@ -33,14 +35,15 @@ class ExpenseForm extends React.Component {
 
     onAmountChange = (e) => {
         const amount = e.target.value;
-        if (amount.match(/^\d*(\.\d{0,2})?$/)) {
+        if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
             this.setState(() => ({amount}));
         }
     }
 
     onDateChange = (createdAt) => {
-        console.log(createdAt);
-        this.setState(() => ({createdAt}));
+        if (createdAt) {
+            this.setState(() => ({createdAt}));
+        }
     }
     
     // passed-in arguement **MUST** be named "focused"
@@ -48,10 +51,27 @@ class ExpenseForm extends React.Component {
         this.setState(() => ({calendarFocused: focused}));
     }
 
+    onSubmit = (e) => {
+        e.preventDefault();
+        
+        if (!this.state.desc || !this.state.amount) {
+            this.setState(() => {
+                return {err_msg: 'Please fill desc and amount'}
+            });
+
+        } else {
+            this.setState(() => {
+                return {err_msg: ''}
+            });
+
+        }
+    }
+
     render () {
         return (
             <div>
-                <form>
+                {this.state.err_msg && <p>{this.state.err_msg}</p>}
+                <form onSubmit={this.onSubmit}>
                     <input type="text" 
                         placeholder="Description" 
                         autoFocus 
