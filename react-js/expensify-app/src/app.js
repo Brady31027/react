@@ -27,7 +27,7 @@ store.dispatch(actionAddExpense({
     createdAt: 120,
 }));
 
-store.dispatch(actionSetTextFilter("bill"));
+//store.dispatch(actionSetTextFilter("bill"));
 
 const result = getVisibleExpenses(store.getState().expenses, store.getState().filters);
 console.log(result);
